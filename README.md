@@ -3,7 +3,7 @@
 Live Demo: https://voz-news.now.sh/
 
 ## What is this?
-This is a SIR React news reader. The data coming from Voz News (https://next.voz.vn).
+This is a SSR React news reader. The data coming from Voz News (https://next.voz.vn).
 
 This application was built with:
 - TypeScript
