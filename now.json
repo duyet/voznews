@@ -1,6 +1,14 @@
 {
+    "name": "nextnews",
+    "alias": "voz-news.now.sh",
     "version": 2,
     "builds": [
-        { "src": "package.json", "use": "@now/next" }
+        {
+            "src": "next.config.js",
+            "use": "@now/next",
+            "config": {
+                "maxLambdaSize": "50mb"
+            }
+        }
     ]
 }
