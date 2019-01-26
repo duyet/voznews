@@ -1,6 +1,5 @@
 {
     "name": "nextnews",
-    "alias": "voz-news.now.sh",
     "version": 2,
     "builds": [
         {
