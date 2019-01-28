@@ -2,6 +2,12 @@ import { Component, ReactNode } from 'react';
 import Head from 'next/head';
 import 'isomorphic-unfetch';
 
+const nsfwKeywords: string[] = ['bikini', 'nóng bỏng', 'bỏng mắt', 'ngắm', 'nhan sắc',
+                                'dung tục', 'dàn diễn viên', 'hot girl', 'nội y', 'hoa hậu',
+                                'đồng tính', 'tiên nữ', 'đen tối', 'khiêu dâm', 'vũ nữ', 'khỏa thân',
+                                'thác loạn', 'nữ sinh', 'yêu râu xanh', 'bồ', 'vú', 'ngực khủng',
+                                'dâm', 'á hậu', 'đỏ mặt', 'mỏng', 'chuyện người lớn'];
+
 type NewsItem = {
     id: number;
     title: string;
@@ -33,12 +39,22 @@ export default class Index extends Component<PropsType> {
         return { page: page, items: items };
     }
 
+    hasNsfwTag(item: NewsItem): boolean {
+        const input = item.title.toLowerCase();
+        for (const key of nsfwKeywords) {
+            if (input.match(key) !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render(): ReactNode {
         const news: ReactNode[] = this.props.items.map((item: NewsItem) => {
             return <li className="p-2 cursor-pointer hover:bg-blue-lightest" key={item.id}>
                 <a className="no-underline text-grey-darkest" href={`/view?id=${item.id}&page=${this.props.page}`}>
                     {item.title}
-                    <div className="text-sm text-grey-dark">{item.time} | {item.comments} comments</div>
+                <div className="text-sm text-grey-dark">{this.hasNsfwTag(item) ? (<span><span className="text-red text-sm">nsfw</span> | </span>) : ''} {item.time} | {item.comments} comments</div>
                 </a>
             </li>;
         });
