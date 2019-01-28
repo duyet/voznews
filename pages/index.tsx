@@ -5,7 +5,7 @@ import 'isomorphic-unfetch';
 const nsfwKeywords: string[] = ['bikini', 'nóng bỏng', 'bỏng mắt', 'ngắm', 'nhan sắc', 'bốc lửa',
                                 'dung tục', 'dàn diễn viên', 'hot girl', 'nội y', 'hoa hậu', 'người đẹp',
                                 'đồng tính', 'tiên nữ', 'đen tối', 'khiêu dâm', 'vũ nữ', 'khỏa thân',
-                                'thác loạn', 'nữ sinh', 'yêu râu xanh', 'bồ', 'vú', 'ngực khủng',
+                                'thác loạn', 'nữ sinh', 'yêu râu xanh', 'bồ', 'vú', 'ngực khủng', 'sex',
                                 'dâm', 'á hậu', 'đỏ mặt', 'mỏng', 'chuyện người lớn'];
 
 type NewsItem = {
