@@ -50,6 +50,8 @@ export default class View extends Component<PropsType> {
             <div className="container max-w-md sm mx-auto p-4 font-sans text-md text-grey-darkest leading-normal">
                 <Head>
                     <title>{this.props.title}</title>
+                    <meta property="og:title" content={this.props.title} />
+                    <meta property="og:type" content="article" />
                 </Head>
                 <style jsx global>{`blockquote { background: #fafafa; padding: 10px; border-left: 2px solid #eee; }`}</style>
                 <a href={`/index?page=${(this.props.page)}`} className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a>
