@@ -2,8 +2,8 @@ import { Component, ReactNode } from 'react';
 import Head from 'next/head';
 import 'isomorphic-unfetch';
 
-const nsfwKeywords: string[] = ['bikini', 'nóng bỏng', 'bỏng mắt', 'ngắm', 'nhan sắc',
-                                'dung tục', 'dàn diễn viên', 'hot girl', 'nội y', 'hoa hậu',
+const nsfwKeywords: string[] = ['bikini', 'nóng bỏng', 'bỏng mắt', 'ngắm', 'nhan sắc', 'bốc lửa',
+                                'dung tục', 'dàn diễn viên', 'hot girl', 'nội y', 'hoa hậu', 'người đẹp',
                                 'đồng tính', 'tiên nữ', 'đen tối', 'khiêu dâm', 'vũ nữ', 'khỏa thân',
                                 'thác loạn', 'nữ sinh', 'yêu râu xanh', 'bồ', 'vú', 'ngực khủng',
                                 'dâm', 'á hậu', 'đỏ mặt', 'mỏng', 'chuyện người lớn'];
