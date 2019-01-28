@@ -1,4 +1,5 @@
 import { Component, ReactNode } from 'react';
+import Head from 'next/head';
 import 'isomorphic-unfetch';
 
 type NewsItem = {
@@ -43,6 +44,9 @@ export default class Index extends Component<PropsType> {
         });
         return (
             <div className="container max-w-md sm mx-auto p-4 font-sans text-md text-grey-darkest leading-normal">
+                <Head>
+                    <title>Tin tức tổng hợp</title>
+                </Head>
                 <a href="/" className="block bg-purple-darker text-white p-2 w-full mb-2 no-underline">voznews</a>
                 <ul className="list-reset">{news}</ul>
                 <div className="flex p-2">
