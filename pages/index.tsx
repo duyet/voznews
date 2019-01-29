@@ -27,7 +27,7 @@ export default class Index extends Component<PropsType> {
         let host = '';
         if (params.req && params.req.get) {
             host = `${params.req.protocol}://${params.req.get('Host')}`;
-        } else if (window && window.location) {
+        } else if (window) {
             host = `${window.location.protocol}//${window.location.host}`;
         } else {
             host = 'https://voz-news.now.sh/';
