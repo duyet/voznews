@@ -1,48 +1,50 @@
 "use strict";
-exports.__esModule = true;
-var express = require("express");
-var next = require("next");
-var request = require("request");
-var port = process.env.PORT || 3000;
-var dev = process.env.NODE_ENV !== 'production';
-var app = next({ dev: dev });
-var handle = app.getRequestHandler();
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const next = require("next");
+const request = require("request");
+const port = process.env.PORT || 3000;
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 app.prepare()
-    .then(function () {
-    var server = express();
-    server.get('/api/list', function (req, res) {
-        var page = req.query.page;
-        request.get("https://p.voz.vn/feed/?box=diembao&page=" + page, function (err, data) {
+    .then(() => {
+    const server = express();
+    server.get('/api/list', (req, res) => {
+        const page = req.query.page;
+        request.get(`https://p.voz.vn/feed/?box=diembao&page=${page}`, (err, data) => {
             if (err)
                 console.error(err);
             res.json(JSON.parse(data.body));
         });
     });
-    server.get('/api/view', function (req, res) {
-        var id = req.query.id;
-        request.get("https://p.voz.vn/posts/" + id, function (err, data) {
+    server.get('/api/view', (req, res) => {
+        const id = req.query.id;
+        request.get(`https://p.voz.vn/posts/${id}`, (err, data) => {
             if (err)
                 console.error(err);
             res.json(JSON.parse(data.body));
         });
     });
-    server.get('/api/comments', function (req, res) {
-        var id = req.query.id;
-        request.get("https://p.voz.vn/posts/" + id + "/comments", function (err, data) {
+    server.get('/api/comments', (req, res) => {
+        const id = req.query.id;
+        request.get(`https://p.voz.vn/posts/${id}/comments`, (err, data) => {
             if (err)
                 console.error(err);
             res.json(JSON.parse(data.body));
         });
     });
-    server.get('*', function (req, res) {
+    server.get('*', (req, res) => {
         return handle(req, res);
     });
-    server.listen(port, function (err) {
+    server.listen(port, (err) => {
         if (err)
             throw err;
-        console.log("> Ready at :" + port);
+        console.log(`> Ready at :${port}`);
     });
-})["catch"](function (err) {
+})
+    .catch((err) => {
     console.error(err.stack);
     process.exit(1);
 });
+//# sourceMappingURL=index.js.map
