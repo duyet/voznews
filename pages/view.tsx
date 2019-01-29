@@ -1,5 +1,6 @@
- import { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import 'isomorphic-unfetch';
 
 type Maybe<T> = T | null;
@@ -32,9 +33,15 @@ type PropsType = {
 
 export default class View extends Component<PropsType> {
     static async getInitialProps(params: any) {
-        const data = await fetch(`https://p.voz.vn/posts/${params.query.id}`);
+        let host = '';
+        if (params.req) {
+            host = `${params.req.protocol}://${params.req.get('Host')}`;
+        } else {
+            host = `${window.location.protocol}//${window.location.host}`;
+        }
+        const data = await fetch(`${host}/api/view?id=${params.query.id}`);
         const json = await data.json();
-        const comments = await fetch(`https://p.voz.vn/posts/${params.query.id}/comments`);
+        const comments = await fetch(`${host}/api/comments?id=${params.query.id}`);
         const comments_json = await comments.json();
         return {
             id: json.id,
@@ -69,13 +76,13 @@ export default class View extends Component<PropsType> {
                 <meta property="og:image" content={`${this.getFirstImage(this.props.content)}`} />
                 </Head>
                 <style jsx global>{`blockquote { background: #fafafa; padding: 10px; border-left: 2px solid #eee; }`}</style>
-                <a href={`/index?page=${(this.props.page)}`} className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a>
+                <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
                 <h2 className="my-2">{this.props.title}</h2>
                 <div className="my-2" dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
                 <ul className="p-5 my-2 bg-grey-lightest list-reset">
                 { this.props.comments.map((c: Comment, id: number) => <CommentItem key={id} comment={c}/>) }
                 </ul>
-                <a href={`/index?page=${(this.props.page)}`} className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a>
+                <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
             </div>
         )
     }
