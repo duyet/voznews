@@ -12,10 +12,11 @@ app.prepare()
     const server = express();
     server.get('/api/list', (req, res) => {
         const page = req.query.page;
-        request.get(`https://p.voz.vn/feed/?box=diembao&page=${page}`, (err, data) => {
+        request.get(`https://p.voz.vn/feed/?box=diembao&page=${page}`, (err, response, body) => {
             if (err)
                 console.error(err);
-            res.json(JSON.parse(data.body));
+            console.log("DBG", response);
+            res.json(body);
         });
     });
     server.get('/api/view', (req, res) => {
