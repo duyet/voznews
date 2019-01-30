@@ -7,7 +7,6 @@
         "dev": "nodemon --exitcrash",
         "build": "next build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node dist/index.js",
-        "now-build": "next build && tsc --project tsconfig.server.json",
         "heroku-postbuild": "next build && tsc --project tsconfig.server.json"
     },
     "dependencies": {
