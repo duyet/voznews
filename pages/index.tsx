@@ -29,8 +29,6 @@ export default class Index extends Component<PropsType> {
             host = `${params.req.protocol}://${params.req.get('Host')}`;
         } else if (typeof window !== 'undefined') {
             host = `${window.location.protocol}//${window.location.host}`;
-        } else {
-            host = 'https://voz-news.now.sh/';
         }
         const data = await fetch(`${host}/api/list?page=${page}`);
         const json = await data.json();

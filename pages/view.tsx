@@ -72,7 +72,7 @@ export default class View extends Component<PropsType> {
                 <meta property="og:title" content={this.props.title} />
                 <meta property="og:description" content={`Bấm vào link để xem chi tiết bài viết ${this.props.title}`} />
                 <meta property="og:type" content="article" />
-                <meta property="og:url" content={`https://voz-news.now.sh/view?id=${this.props.id}&page=${this.props.page}`} />
+                <meta property="og:url" content={`https://voznews.herokuapp.com/view?id=${this.props.id}&page=${this.props.page}`} />
                 <meta property="og:image" content={`${this.getFirstImage(this.props.content)}`} />
                 </Head>
                 <style jsx global>{`blockquote { background: #fafafa; padding: 10px; border-left: 2px solid #eee; }`}</style>
