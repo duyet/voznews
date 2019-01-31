@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "nodemon --exitcrash",
+        "dev": "nodemon",
         "build": "next build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node dist/index.js",
         "heroku-postbuild": "next build && tsc --project tsconfig.server.json"

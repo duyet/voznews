@@ -1,7 +1,10 @@
-import { Component, ReactNode } from 'react';
+import React, { Component, ReactNode, MouseEventHandler, RefObject } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import 'isomorphic-unfetch';
+import NProgress from 'nprogress'
+
+const HostName = `https://voznews.herokuapp.com`;
 
 type Maybe<T> = T | null;
 
@@ -31,28 +34,73 @@ type PropsType = {
     comments: Comment[];
 };
 
-export default class View extends Component<PropsType> {
-    static async getInitialProps(params: any) {
-        let host = '';
-        if (params.req) {
-            host = `${params.req.protocol}://${params.req.get('Host')}`;
-        } else {
-            host = `${window.location.protocol}//${window.location.host}`;
+type StateType = {
+    comments: Comment[];
+    commentPage: number;
+};
+
+type CommentListPropType = {
+    data: Comment[];
+    page: number;
+    onClick: MouseEventHandler;
+};
+
+const CommentList = (props: CommentListPropType) => {
+    let result = props.data.map((c: Comment, id: number) => <CommentItem key={id} comment={c}/>);
+    return (
+        <div className="bg-grey-lightest my-2">
+            <ul className="p-2 list-reset">{result}</ul>
+            <button className="p-2 bg-transparent w-full hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline mx-auto" onClick={props.onClick}>More Comment</button>
+        </div>
+    );
+};
+
+class ApiService {
+    static getHost(): string {
+        if (typeof window !== 'undefined') {
+            return `${window.location.protocol}//${window.location.host}`;
         }
-        const data = await fetch(`${host}/api/view?id=${params.query.id}`);
-        const json = await data.json();
-        const comments = await fetch(`${host}/api/comments?id=${params.query.id}`);
+        return HostName;
+    }
+
+    static async getComments(id: number, page: number): Promise<Comment[]> {
+        const comments = await fetch(`${this.getHost()}/api/comments?id=${id}&page=${page}`);
         const comments_json = await comments.json();
+        return comments_json.results.map((c: any) => ({
+            content: c.content,
+            username: c.user_meta.display_name,
+            avatar: c.user_meta.photo_url
+        }));
+    }
+
+    static async getContent(id: number): Promise<any> {
+        const data = await fetch(`${this.getHost()}/api/view?id=${id}`);
+        const json = await data.json();
         return {
             id: json.id,
-            page: parseInt(params.query.page) || 1,
             title: json.title,
-            content: json.content,
-            comments: comments_json.results.map((c: any) => ({
-                content: c.content,
-                username: c.user_meta.display_name,
-                avatar: c.user_meta.photo_url
-            }))
+            content: json.content
+        }
+    }
+}
+
+export default class View extends Component<PropsType, StateType> {
+    state: StateType = {
+        comments: [],
+        commentPage: 1
+    };
+    private scrollAnchorRef: RefObject<HTMLDivElement>;
+
+    constructor(props: PropsType) {
+        super(props);
+        this.scrollAnchorRef = React.createRef();
+    }
+    
+    static async getInitialProps(params: any) {        
+        return {
+            page: parseInt(params.query.page) || 1,
+            ...await ApiService.getContent(params.query.id),
+            comments: await ApiService.getComments(params.query.id, params.query.page)
         };
     }
 
@@ -64,6 +112,17 @@ export default class View extends Component<PropsType> {
         return null;
     }
 
+    async loadNextComments() {
+        NProgress.start();
+        const comments = await ApiService.getComments(this.props.id, this.state.commentPage + 1);
+        NProgress.done();
+        this.scrollAnchorRef.current!.scrollIntoView();
+        this.setState({
+            commentPage: this.state.commentPage + 1,
+            comments: comments
+        });
+    }
+
     render(): ReactNode {
         return (
             <div className="container max-w-md sm mx-auto p-4 font-sans text-md text-grey-darkest leading-normal">
@@ -72,16 +131,15 @@ export default class View extends Component<PropsType> {
                 <meta property="og:title" content={this.props.title} />
                 <meta property="og:description" content={`Bấm vào link để xem chi tiết bài viết ${this.props.title}`} />
                 <meta property="og:type" content="article" />
-                <meta property="og:url" content={`https://voznews.herokuapp.com/view?id=${this.props.id}&page=${this.props.page}`} />
+                <meta property="og:url" content={`${HostName}/view?id=${this.props.id}&page=${this.props.page}`} />
                 <meta property="og:image" content={`${this.getFirstImage(this.props.content)}`} />
                 </Head>
                 <style jsx global>{`blockquote { background: #fafafa; padding: 10px; border-left: 2px solid #eee; }`}</style>
                 <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
                 <h2 className="my-2">{this.props.title}</h2>
                 <div className="my-2" dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
-                <ul className="p-5 my-2 bg-grey-lightest list-reset">
-                { this.props.comments.map((c: Comment, id: number) => <CommentItem key={id} comment={c}/>) }
-                </ul>
+                <div ref={this.scrollAnchorRef}></div>
+                <CommentList data={this.state.comments.length ? this.state.comments : this.props.comments} page={this.state.commentPage} onClick={this.loadNextComments.bind(this)}/>
                 <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
             </div>
         )

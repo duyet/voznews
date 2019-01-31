@@ -29,7 +29,8 @@ app.prepare()
 
         server.get('/api/comments', (req: express.Request, res: express.Response) => {
             const id = req.query.id;
-            request.get(`https://p.voz.vn/posts/${id}/comments`, (err, data) => {
+            const page = req.query.page || 1;
+            request.get(`https://p.voz.vn/posts/${id}/comments?page=${page}`, (err, data) => {
                 if (err) console.error(err);
                 res.json(JSON.parse(data.body));
             });
