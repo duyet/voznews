@@ -20,9 +20,15 @@ type CommentProps = {
 };
 
 const CommentItem = (props: CommentProps) => {
-    return <li className="p-2 border-b border-grey-light text-md">
+    return <li className="p-2 border-b border-grey-light text-sm">
         <div className="font-semibold">{props.comment.username}</div>
-        <div className="my-2" dangerouslySetInnerHTML={{ __html: props.comment.content }}></div>
+        <style jsx global>{`
+        .comment-content .voz_smiley, .comment-content .voz_smiley_es {
+            max-height: 40px;
+            vertical-align: middle;
+        }
+        .comment-content blockquote img { display: block; height: 10px; width: 50%; background: #FFF; border: 1px dashed #ccc; padding: 5px; }`}</style>
+        <div className="comment-content my-2 align-middle" dangerouslySetInnerHTML={{ __html: props.comment.content }}></div>
     </li>;
 };
 
@@ -125,7 +131,7 @@ export default class View extends Component<PropsType, StateType> {
 
     render(): ReactNode {
         return (
-            <div className="container max-w-md sm mx-auto p-4 font-sans text-md text-grey-darkest leading-normal">
+            <div className="container max-w-md sm mx-auto p-4 font-sans text-sm text-grey-darkest leading-normal">
                 <Head>
                 <title>{this.props.title}</title>
                 <meta property="og:title" content={this.props.title} />
@@ -135,12 +141,11 @@ export default class View extends Component<PropsType, StateType> {
                 <meta property="og:image" content={`${this.getFirstImage(this.props.content)}`} />
                 </Head>
                 <style jsx global>{`blockquote { background: #fafafa; padding: 10px; border-left: 2px solid #eee; }`}</style>
-                <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
-                <h2 className="my-2">{this.props.title}</h2>
-                <div className="my-2" dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
+                <Link href={`/index?page=${(this.props.page)}`}><a className="sticky pin-l pin-t p-2 -ml-20 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
+                <h2 className="my-2 py-2">{this.props.title}</h2>
+                <div className="my-2 text-justify" dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
                 <div ref={this.scrollAnchorRef}></div>
                 <CommentList data={this.state.comments.length ? this.state.comments : this.props.comments} page={this.state.commentPage} onClick={this.loadNextComments.bind(this)}/>
-                <Link href={`/index?page=${(this.props.page)}`}><a className="p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded no-underline">← back</a></Link>
             </div>
         )
     }
