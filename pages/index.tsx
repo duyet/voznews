@@ -21,6 +21,13 @@ type PropsType = {
     items: NewsItem[];
 };
 
+const QuickPaginator = (props: any) => {
+    const page = props.page;
+    return <div className="flex-1 flex">
+        { Array(10).fill(0).map((_: number, i: number) => <Link key={i} href={`/index?page=${(page + i)}`}><a className={`no-underline mx-1 text-center flex-1 p-2 hover:bg-blue hover:text-white font-semibold border border-blue rounded ${i == 0 ? 'bg-blue text-white' : 'bg-transparent text-blue-dark'}`}>{page + i}</a></Link>) }
+    </div>;
+};
+
 export default class Index extends Component<PropsType> {
     static async getInitialProps(params: any) {
         const page = parseInt(params.query.page) || 1;
@@ -74,10 +81,10 @@ export default class Index extends Component<PropsType> {
                 </Head>
                 <a href="/" className="block bg-purple-darker text-white p-2 w-full mb-2 no-underline">voznews</a>
                 <ul className="list-reset">{news}</ul>
-                <div className="flex p-2">
-                    <Link href={`/index?page=${(this.props.page - 1)}`}><a className="no-underline p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded">← back</a></Link>
-                    <span className="flex-1"></span>
-                    <Link href={`/index?page=${(this.props.page + 1)}`}><a className="no-underline p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded">next →</a></Link>
+                <div className="flex p-2 text-sm">
+                    <Link href={`/index?page=${(this.props.page - 1)}`}><a className="no-underline flex-no-shrink p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded">← back</a></Link>
+                    <QuickPaginator page={this.props.page} />
+                    <Link href={`/index?page=${(this.props.page + 1)}`}><a className="no-underline flex-no-shrink p-2 bg-transparent hover:bg-blue hover:text-white text-blue-dark font-semibold border border-blue rounded">next →</a></Link>
                 </div>
             </div>
         )

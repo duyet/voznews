@@ -23,7 +23,7 @@ const CommentItem = (props: CommentProps) => {
     return <li className="p-2 border-b border-grey-light text-sm">
         <div className="font-semibold">{props.comment.username}</div>
         <style jsx global>{`
-        .comment-content .voz_smiley, .comment-content .voz_smiley_es {
+        .comment-content .voz_smiley, .comment-content .voz_smiley_es, .comment-content img[id^=smil] {
             max-height: 40px;
             vertical-align: middle;
         }
@@ -72,11 +72,14 @@ class ApiService {
     static async getComments(id: number, page: number): Promise<Comment[]> {
         const comments = await fetch(`${this.getHost()}/api/comments?id=${id}&page=${page}`);
         const comments_json = await comments.json();
-        return comments_json.results.map((c: any) => ({
-            content: c.content,
-            username: c.user_meta.display_name,
-            avatar: c.user_meta.photo_url
-        }));
+        if (comments_json && comments_json.results && comments_json.results.length) {
+            return comments_json.results.map((c: any) => ({
+                content: c.content,
+                username: c.user_meta.display_name,
+                avatar: c.user_meta.photo_url
+            }));
+        }
+        return [];
     }
 
     static async getContent(id: number): Promise<any> {
@@ -106,7 +109,7 @@ export default class View extends Component<PropsType, StateType> {
         return {
             page: parseInt(params.query.page) || 1,
             ...await ApiService.getContent(params.query.id),
-            comments: await ApiService.getComments(params.query.id, params.query.page)
+            comments: await ApiService.getComments(params.query.id, 1)
         };
     }
 
