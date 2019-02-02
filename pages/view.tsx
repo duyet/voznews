@@ -4,7 +4,7 @@ import Link from 'next/link';
 import 'isomorphic-unfetch';
 import NProgress from 'nprogress'
 
-const HostName = `https://voznews.herokuapp.com`;
+const HostName = `https://voz.fullsnack.io`;
 
 type Maybe<T> = T | null;
 
@@ -20,7 +20,7 @@ type CommentProps = {
 };
 
 const CommentItem = (props: CommentProps) => {
-    return <li className="p-2 border-b border-grey-light text-sm">
+    return <li className="p-2 border-b border-grey-light">
         <div className="font-semibold">{props.comment.username}</div>
         <style jsx global>{`
         .comment-content .voz_smiley, .comment-content .voz_smiley_es, .comment-content img[id^=smil] {
@@ -134,7 +134,7 @@ export default class View extends Component<PropsType, StateType> {
 
     render(): ReactNode {
         return (
-            <div className="container max-w-md sm mx-auto p-4 font-sans text-sm text-grey-darkest leading-normal">
+            <div className="container max-w-md sm mx-auto p-4 font-sans md:text-sm sm:text-md text-grey-darkest leading-normal">
                 <Head>
                 <title>{this.props.title}</title>
                 <meta property="og:title" content={this.props.title} />
