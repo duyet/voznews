@@ -62,15 +62,8 @@ const CommentList = (props: CommentListPropType) => {
 };
 
 class ApiService {
-    static getHost(): string {
-        if (typeof window !== 'undefined') {
-            return `${window.location.protocol}//${window.location.host}`;
-        }
-        return HostName;
-    }
-
     static async getComments(id: number, page: number): Promise<Comment[]> {
-        const comments = await fetch(`${this.getHost()}/api/comments?id=${id}&page=${page}`);
+        const comments = await fetch(`/api/comments?id=${id}&page=${page}`);
         const comments_json = await comments.json();
         if (comments_json && comments_json.results && comments_json.results.length) {
             return comments_json.results.map((c: any) => ({
@@ -83,7 +76,7 @@ class ApiService {
     }
 
     static async getContent(id: number): Promise<any> {
-        const data = await fetch(`${this.getHost()}/api/view?id=${id}`);
+        const data = await fetch(`/api/view?id=${id}`);
         const json = await data.json();
         return {
             id: json.id,

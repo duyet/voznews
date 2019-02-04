@@ -31,13 +31,7 @@ const QuickPaginator = (props: any) => {
 export default class Index extends Component<PropsType> {
     static async getInitialProps(params: any) {
         const page = parseInt(params.query.page) || 1;
-        let host = '';
-        if (params.req && params.req.get) {
-            host = `https://${params.req.get('Host')}`;
-        } else if (typeof window !== 'undefined') {
-            host = `https//${window.location.host}`;
-        }
-        const data = await fetch(`${host}/api/list?page=${page}`);
+        const data = await fetch(`/api/list?page=${page}`);
         const json = await data.json();
         const items: NewsItem[] = json.results.reduce((arr: NewsItem[], item: any) => {
             let date: Date = new Date(item.created);
