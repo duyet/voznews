@@ -33,9 +33,9 @@ export default class Index extends Component<PropsType> {
         const page = parseInt(params.query.page) || 1;
         let host = '';
         if (params.req && params.req.get) {
-            host = `${params.req.protocol}://${params.req.get('Host')}`;
+            host = `https://${params.req.get('Host')}`;
         } else if (typeof window !== 'undefined') {
-            host = `${window.location.protocol}//${window.location.host}`;
+            host = `https//${window.location.host}`;
         }
         const data = await fetch(`${host}/api/list?page=${page}`);
         const json = await data.json();
